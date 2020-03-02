@@ -11,7 +11,7 @@ class CashbackCalculatorTest {
     private val observable = CashbackCalculatorImpl()
 
     @Test
-    fun `cashBack is equals 10 for first transaction sum 1000 and black loyalty program`() {
+    fun `cashBack equals 10 for first transaction sum 1000 and black loyalty program`() {
         val transactionInfo = TransactionInfo(
             loyaltyProgramName = LOYALTY_PROGRAM_BLACK,
             transactionSum = 1000.0,
@@ -24,7 +24,7 @@ class CashbackCalculatorTest {
     }
 
     @Test
-    fun `cashBack is equals 0 if cash back total value equals 3000`() {
+    fun `cashBack equals 0 if cash back total value equals 3000`() {
         val transactionInfo = TransactionInfo(
             loyaltyProgramName = LOYALTY_PROGRAM_BLACK,
             transactionSum = 1000.0,
@@ -37,7 +37,7 @@ class CashbackCalculatorTest {
     }
 
     @Test
-    fun `cash back is equals 500 if transaction sum equals 100_000 and cash back total value equals 2500`() {
+    fun `cash back equals 500 if transaction sum equals 100_000 and cash back total value equals 2500`() {
         val transactionInfo = TransactionInfo(
             loyaltyProgramName = LOYALTY_PROGRAM_BLACK,
             transactionSum = 100_000.0,
