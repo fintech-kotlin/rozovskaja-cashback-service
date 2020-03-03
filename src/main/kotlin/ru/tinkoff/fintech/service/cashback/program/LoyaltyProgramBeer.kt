@@ -18,12 +18,12 @@ class LoyaltyProgramBeer : CashbackCalculator {
         private const val specialName = "Олег"
         private const val specialSurname = "Олегов"
 
-        @JvmStatic fun checkCurrentMonth(name: String) : Boolean {
+        private fun checkCurrentMonth(name: String) : Boolean {
             val month = LocalDate.now().month.getDisplayName(TextStyle.FULL, Locale("ru"))
             return month.startsWith(name[0], true)
         }
 
-        @JvmStatic fun checkPreviousOrNextMonth(name: String) : Boolean {
+        private fun checkPreviousOrNextMonth(name: String) : Boolean {
             val previousMonth = LocalDate.now().minusMonths(1).month.getDisplayName(TextStyle.FULL, Locale("ru"))
             val nextMonth = LocalDate.now().plusMonths(1).month.getDisplayName(TextStyle.FULL, Locale("ru"))
             return previousMonth.startsWith(name[0], true) || nextMonth.startsWith(name[0], true)

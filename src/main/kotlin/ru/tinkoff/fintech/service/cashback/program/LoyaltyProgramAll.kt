@@ -18,12 +18,12 @@ class LoyaltyProgramAll : CashbackCalculator {
             return (a * b) / gcd(a, b)
         }
 
-        @JvmStatic fun cashbackLoyaltyProgramAll(transactionInfo: TransactionInfo) =
+        private fun cashbackLoyaltyProgramAll(transactionInfo: TransactionInfo) =
             with (transactionInfo) {
                 round((lcm(firstName.length, lastName.length).toDouble() * transactionSum / 100000) * 100) / 100
             }
 
-        @JvmStatic fun isPalindromeIf(transactionSum: Double) : Boolean {
+        private fun isPalindromeIf(transactionSum: Double) : Boolean {
             val pennies = (transactionSum * 100).toInt().toString()
             val len = pennies.length
             var count = 0

@@ -19,7 +19,7 @@ class CashbackCalculatorImpl : CashbackCalculator {
         private const val cashbackMagicNumber = 6.66
         private const val magicNumber = 666
 
-        @JvmStatic fun increaseCashbackIf(transactionInfo: TransactionInfo): Double {
+        private fun increaseCashbackIf(transactionInfo: TransactionInfo): Double {
             return with(transactionInfo) {
                 if (transactionSum.compareTo(magicNumber.toDouble()) == 0
                     || (transactionSum % magicNumber.toDouble()).compareTo(0.0) == 0) {
