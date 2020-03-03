@@ -2,11 +2,11 @@ package ru.tinkoff.fintech.service.cashback
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import ru.tinkoff.fintech.service.cashback.utils.CashbackUtils
+import ru.tinkoff.fintech.service.cashback.program.LoyaltyProgramAll
 
-class CashbackUtilsTest {
+class PalindromeTest {
 
-    private val observable = CashbackUtils()
+    private val observable = LoyaltyProgramAll()
 
     @Test
     fun `should be palindrome`() {
@@ -35,4 +35,13 @@ class CashbackUtilsTest {
         val actual = observable.isPalindromeIf(transactionSum)
         Assertions.assertEquals(false, actual)
     }
+}
+
+private fun LoyaltyProgramAll.isPalindromeIf(transactionSum: Double): Boolean {
+    val pennies = (transactionSum * 100).toInt().toString()
+    val len = pennies.length
+    var count = 0
+    for (i in 0..len / 2)
+        if (pennies[i] != pennies[len - i - 1]) count++
+    return count <= 1
 }

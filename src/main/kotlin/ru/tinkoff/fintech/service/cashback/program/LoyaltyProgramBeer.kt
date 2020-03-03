@@ -3,7 +3,9 @@ package ru.tinkoff.fintech.service.cashback.program
 import ru.tinkoff.fintech.model.TransactionInfo
 import ru.tinkoff.fintech.service.cashback.*
 import ru.tinkoff.fintech.service.cashback.MCC_BEER
-import ru.tinkoff.fintech.service.cashback.utils.CashbackUtils
+import java.time.LocalDate
+import java.time.format.TextStyle
+import java.util.*
 
 class LoyaltyProgramBeer : CashbackCalculator {
     companion object {
@@ -15,20 +17,31 @@ class LoyaltyProgramBeer : CashbackCalculator {
 
         private const val specialName = "Олег"
         private const val specialSurname = "Олегов"
+
+        @JvmStatic fun checkCurrentMonth(name: String) : Boolean {
+            val month = LocalDate.now().month.getDisplayName(TextStyle.FULL, Locale("ru"))
+            return month.startsWith(name[0], true)
+        }
+
+        @JvmStatic fun checkPreviousOrNextMonth(name: String) : Boolean {
+            val previousMonth = LocalDate.now().minusMonths(1).month.getDisplayName(TextStyle.FULL, Locale("ru"))
+            val nextMonth = LocalDate.now().plusMonths(1).month.getDisplayName(TextStyle.FULL, Locale("ru"))
+            return previousMonth.startsWith(name[0], true) || nextMonth.startsWith(name[0], true)
+        }
     }
 
     override fun calculateCashback(transactionInfo: TransactionInfo): Double {
         return with(transactionInfo) {
             if (mccCode == MCC_BEER && firstName.equals(specialName, true) && lastName.equals(specialSurname, true)) {
-                CashbackUtils().cashback(transactionSum, cashbackFullName)
+                cashback(transactionSum, cashbackFullName)
             } else if (mccCode == MCC_BEER && firstName.equals(specialName, true)) {
-                CashbackUtils().cashback(transactionSum, cashbackShortName)
-            } else if (mccCode == MCC_BEER && CashbackUtils().checkCurrentMonth(firstName)) {
-                CashbackUtils().cashback(transactionSum, cashbackCurrentMonth)
-            } else if (mccCode == MCC_BEER && CashbackUtils().checkPreviousOrNextMonth(firstName)) {
-                CashbackUtils().cashback(transactionSum, cashbackPreviousOrNextMonth)
+                cashback(transactionSum, cashbackShortName)
+            } else if (mccCode == MCC_BEER && checkCurrentMonth(firstName)) {
+                cashback(transactionSum, cashbackCurrentMonth)
+            } else if (mccCode == MCC_BEER && checkPreviousOrNextMonth(firstName)) {
+                cashback(transactionSum, cashbackPreviousOrNextMonth)
             } else
-                CashbackUtils().cashback(transactionSum, cashbackStandard)
+                cashback(transactionSum, cashbackStandard)
         }
     }
 }

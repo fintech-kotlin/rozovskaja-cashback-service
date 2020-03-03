@@ -16,22 +16,34 @@ class CashbackCalculatorImpl : CashbackCalculator {
 
     companion object {
         internal const val cashbackNothing = 0.0
+        private const val cashbackMagicNumber = 6.66
+        private const val magicNumber = 666
+
+        @JvmStatic fun increaseCashbackIf(transactionInfo: TransactionInfo): Double {
+            return with(transactionInfo) {
+                if (transactionSum.compareTo(magicNumber.toDouble()) == 0
+                    || (transactionSum % magicNumber.toDouble()).compareTo(0.0) == 0) {
+                    cashbackMagicNumber
+                }
+                else cashbackNothing
+            }
+        }
     }
 
     override fun calculateCashback(transactionInfo: TransactionInfo): Double {
-        var res = with(transactionInfo) {
-            when (loyaltyProgramName) {
+        with(transactionInfo) {
+            var res = when (loyaltyProgramName) {
                 LOYALTY_PROGRAM_BLACK -> LoyaltyProgramBlack().calculateCashback(transactionInfo)
                 LOYALTY_PROGRAM_BEER -> LoyaltyProgramBeer().calculateCashback(transactionInfo)
                 LOYALTY_PROGRAM_ALL -> LoyaltyProgramAll().calculateCashback(transactionInfo)
                 else -> cashbackNothing
             }
-        }
-        res += MagicNumber().increaseCashbackIf(transactionInfo)
-        return with(transactionInfo) {
-            if (cashbackTotalValue >= MAX_CASH_BACK) cashbackNothing
-            if (res + cashbackTotalValue > MAX_CASH_BACK) MAX_CASH_BACK - cashbackTotalValue
-            else res
+            res += increaseCashbackIf(transactionInfo)
+            return when {
+                cashbackTotalValue >= MAX_CASH_BACK -> cashbackNothing
+                res + cashbackTotalValue > MAX_CASH_BACK -> MAX_CASH_BACK - cashbackTotalValue
+                else -> res
+            }
         }
     }
 }
