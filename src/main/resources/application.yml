@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: transaction-listener
+  datasource:
+    url: ****
+    username: ****
+    password: ****
+
+#paimentprocessing:
+#  kafka:
+#    consumer:
+#      bootstrapServers: ${spring.embedded.kafka.brokers}
+#      groupId: testGroup
+#      topic: testTopic
+
