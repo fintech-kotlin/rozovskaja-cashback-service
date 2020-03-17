@@ -1,15 +1,33 @@
 spring:
   application:
     name: transaction-listener
+  jpa:
+    hibernate:
+      generate-ddl: validate
+    database: POSTGRESQL
+    show-sql: true
+    properties:
+      hibernate.jdbc.lob:
+        non_contextual_creation: true
   datasource:
     url: ****
     username: ****
     password: ****
+  sign: rozovskaja
 
-#paimentprocessing:
-#  kafka:
-#    consumer:
-#      bootstrapServers: ${spring.embedded.kafka.brokers}
-#      groupId: testGroup
-#      topic: testTopic
+paymentprocessing:
+  kafka:
+    consumer:
+      bootstrap-servers: 40.69.78.245:19092
+      topic: transactions
+      group-id: cashback
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      request.timeout.ms: 70000
+
+rest:
+  card: http://****/card-service/api/v1/card/
+  client: http://****/client-service/api/v1/client/
+  loyalty: http://****/loyalty-service/api/v1/program/
+  notification: http://****/notification-service/api/v1/client/
 
