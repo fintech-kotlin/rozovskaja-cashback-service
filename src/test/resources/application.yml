@@ -1,12 +1,12 @@
 spring:
+  application:
+    name: transaction-listener
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:db
     username: sa
     password: sa
   sign: rozovskaja
-
-paymentprocessing:
   kafka:
     consumer:
       bootstrapServers: ${spring.embedded.kafka.brokers}

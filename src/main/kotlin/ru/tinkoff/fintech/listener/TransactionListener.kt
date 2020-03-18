@@ -13,8 +13,8 @@ class TransactionListener(private val transactionService: TransactionService) {
         private val log = KotlinLogging.logger {  }
     }
 
-    @KafkaListener(topics = ["\${paymentprocessing.kafka.consumer.topic}"],
-        groupId = "\${paymentprocessing.kafka.consumer.group-id}")
+    @KafkaListener(topics = ["\${spring.kafka.consumer.topic}"],
+        groupId = "\${spring.kafka.consumer.groupId}")
     fun onMessage(transaction: Transaction) {
         if (transaction.mccCode != null)
             transactionService.getTransaction(transaction)

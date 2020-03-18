@@ -14,15 +14,13 @@ spring:
     username: ****
     password: ****
   sign: rozovskaja
-
-paymentprocessing:
   kafka:
     consumer:
-      bootstrap-servers: 40.69.78.245:19092
+      bootstrapServers: 40.69.78.245:19092
       topic: transactions
-      group-id: cashback
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      groupId: cashback
+  #   key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  #   value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       request.timeout.ms: 70000
 
 rest:
