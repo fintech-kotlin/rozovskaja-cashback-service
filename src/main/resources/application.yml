@@ -2,30 +2,22 @@ spring:
   application:
     name: transaction-listener
   jpa:
-    hibernate:
-      generate-ddl: validate
-    database: POSTGRESQL
-    show-sql: true
-    properties:
-      hibernate.jdbc.lob:
-        non_contextual_creation: true
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
   datasource:
     url: ****
     username: ****
     password: ****
-  sign: rozovskaja
   kafka:
     consumer:
       bootstrapServers: 40.69.78.245:19092
       topic: transactions
       groupId: cashback
-  #   key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-  #   value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: earliest
       request.timeout.ms: 70000
+  sign: rozovskaja
 
-rest:
-  card: http://****/card-service/api/v1/card/
-  client: http://****/client-service/api/v1/client/
-  loyalty: http://****/loyalty-service/api/v1/program/
-  notification: http://****/notification-service/api/v1/client/
-
+  rest:
+    card: http://****/card-service/api/v1/card/
+    client: http://****/client-service/api/v1/client/
+    loyalty: http://****/loyalty-service/api/v1/program/
+    notification: http://****/notification-service/api/v1/client/

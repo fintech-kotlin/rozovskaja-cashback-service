@@ -4,5 +4,5 @@ import ru.tinkoff.fintech.model.Transaction
 
 interface TransactionService {
 
-    fun getTransaction(transaction: Transaction)
+    fun processTransaction(transaction: Transaction)
 }

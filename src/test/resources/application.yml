@@ -6,16 +6,15 @@ spring:
     url: jdbc:h2:mem:db
     username: sa
     password: sa
-  sign: rozovskaja
   kafka:
     consumer:
       bootstrapServers: ${spring.embedded.kafka.brokers}
       groupId: testGroup
       topic: testTopic
-      request.timeout.ms: 70000
+  sign: rozovskaja
 
-rest:
-  card: http://****/card-service/api/v1/card/
-  client: http://****/client-service/api/v1/client/
-  loyalty: http://****/loyalty-service/api/v1/program/
-  notification: http://****/notification-service/api/v1/client/
+  rest:
+    card: http://****/card-service/api/v1/card/
+    client: http://****/client-service/api/v1/client/
+    loyalty: http://****/loyalty-service/api/v1/program/
+    notification: http://****/notification-service/api/v1/client/

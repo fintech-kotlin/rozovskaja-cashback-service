@@ -6,12 +6,12 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 
-@Component
+@Service
 class NotificationServiceClientImpl(
-    @Value("\${rest.notification}")
+    @Value("\${spring.rest.notification}")
     private val url: String? = null,
     private val restTemplate: RestTemplate
 ) : NotificationServiceClient {
@@ -25,7 +25,7 @@ class NotificationServiceClientImpl(
             val headers = HttpHeaders()
             headers.accept = listOf(MediaType.APPLICATION_JSON)
 
-            restTemplate.exchange("$url$clientId$message", HttpMethod.POST, HttpEntity(message, headers), String::class.java)
+            restTemplate.exchange("$url$clientId/$message", HttpMethod.POST, HttpEntity(message, headers), String::class.java)
         }.onFailure {
             log.error("Post request sendNotification failed")
         }

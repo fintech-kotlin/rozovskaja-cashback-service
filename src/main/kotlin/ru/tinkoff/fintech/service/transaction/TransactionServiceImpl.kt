@@ -25,7 +25,7 @@ class TransactionServiceImpl(
     private val notificationMessageGenerator: NotificationMessageGenerator
 ) : TransactionService {
 
-    override fun getTransaction(transaction: Transaction) {
+    override fun processTransaction(transaction: Transaction) {
         val card = cardServiceClient.getCard(transaction.cardNumber)
         val client = clientService.getClient(card.client)
         val program = loyaltyServiceClient.getLoyaltyProgram(card.loyaltyProgram)
@@ -43,7 +43,7 @@ class TransactionServiceImpl(
         )
         val cashback = cashbackCalculator.calculateCashback(transactionInfo)
         loyaltyPaymentRepository.save(LoyaltyPaymentEntity(
-            0, // TD: should I increment id with every consequent saving..?
+            0,
             cashback,
             card.id,
             sign,
