@@ -8,7 +8,7 @@ import ru.tinkoff.fintech.model.LoyaltyProgram
 
 @Service
 class LoyaltyServiceClientImpl(
-    @Value("\${spring.rest.loyalty}")
+    @Value("\${transaction.rest.loyalty}")
     private val url: String? = null,
     private val restTemplate: RestTemplate
 ) : LoyaltyServiceClient {

@@ -14,7 +14,7 @@ import java.time.LocalDateTime
 
 @Service
 class TransactionServiceImpl(
-    @Value("\${spring.sign}")
+    @Value("\${transaction.sign}")
     private val sign: String,
     private val cardServiceClient: CardServiceClient,
     private val clientService: ClientService,
@@ -43,12 +43,11 @@ class TransactionServiceImpl(
         )
         val cashback = cashbackCalculator.calculateCashback(transactionInfo)
         loyaltyPaymentRepository.save(LoyaltyPaymentEntity(
-            0,
-            cashback,
-            card.id,
-            sign,
-            transaction.transactionId,
-            LocalDateTime.now()
+            value = cashback,
+            cardId = card.id,
+            sign = sign,
+            transactionId = transaction.transactionId,
+            dateTime = LocalDateTime.now()
         ))
         val notificationMessageInfo = NotificationMessageInfo(
             client.firstName,

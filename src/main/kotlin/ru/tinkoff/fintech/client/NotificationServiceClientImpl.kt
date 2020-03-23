@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate
 
 @Service
 class NotificationServiceClientImpl(
-    @Value("\${spring.rest.notification}")
+    @Value("\${transaction.rest.notification}")
     private val url: String? = null,
     private val restTemplate: RestTemplate
 ) : NotificationServiceClient {

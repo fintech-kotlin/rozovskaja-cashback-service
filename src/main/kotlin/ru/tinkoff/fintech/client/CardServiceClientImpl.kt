@@ -8,7 +8,7 @@ import ru.tinkoff.fintech.model.Card
 
 @Service
 class CardServiceClientImpl(
-    @Value("\${spring.rest.card}")
+    @Value("\${transaction.rest.card}")
     private val url: String? = null,
     private val restTemplate: RestTemplate
 ) : CardServiceClient {

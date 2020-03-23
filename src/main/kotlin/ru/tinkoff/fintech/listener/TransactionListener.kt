@@ -17,14 +17,16 @@ class TransactionListener(
         private val log = KotlinLogging.logger {  }
     }
 
-    @KafkaListener(topics = ["\${spring.kafka.consumer.topic}"], groupId = "\${spring.kafka.consumer.groupId}")
+    @KafkaListener(topics = ["\${transaction.kafka.consumer.topic}"], groupId = "\${transaction.kafka.consumer.groupId}")
     fun onMessage(message: String) {
         val transaction = objectMapper.readValue(message, Transaction::class.java)
-        if (transaction.mccCode != null)
-            transactionService.processTransaction(transaction)
-        else
-            log.info("Do not accrue cashback for transactions other than purchase." +
-                    "Marked by mccCode = ${transaction.mccCode} and operationType = ${transaction.operationType}")
+        with(transaction) {
+            if (mccCode != null)
+                transactionService.processTransaction(transaction)
+            else
+                log.info("Do not accrue cashback for transactions other than purchase." +
+                        "Marked by mccCode = $mccCode and operationType = $operationType")
+        }
     }
 }
 
