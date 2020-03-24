@@ -24,7 +24,7 @@ class TransactionListener(
             if (mccCode != null)
                 transactionService.processTransaction(transaction)
             else
-                log.info("Do not accrue cashback for transactions other than purchase." +
+                log.info("Do not accrue cashback for transactions other than purchase. " +
                         "Marked by mccCode = $mccCode and operationType = $operationType")
         }
     }

@@ -24,10 +24,11 @@ class NotificationServiceClientImpl(
         runCatching {
             val headers = HttpHeaders()
             headers.accept = listOf(MediaType.APPLICATION_JSON)
-
-            restTemplate.exchange("$url$clientId/$message", HttpMethod.POST, HttpEntity(message, headers), String::class.java)
+            restTemplate.exchange("$url$clientId/message", HttpMethod.POST, HttpEntity(message, headers), String::class.java)
         }.onFailure {
             log.error("Post request sendNotification failed")
+        }.onSuccess {
+            log.info("Post request sendNotification succeeded")
         }
     }
 }
