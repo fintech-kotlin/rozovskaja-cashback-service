@@ -18,16 +18,17 @@ class NotificationServiceClientImpl(
 
     companion object {
         private val log = KotlinLogging.logger {  }
+        private val headers = HttpHeaders()
     }
 
     override fun sendNotification(clientId: String, message: String) {
         runCatching {
-            val headers = HttpHeaders()
             headers.accept = listOf(MediaType.APPLICATION_JSON)
-
             restTemplate.exchange("$url$clientId/message", HttpMethod.POST, HttpEntity(message, headers), String::class.java)
         }.onFailure {
-            log.error("Post request sendNotification failed")
+            log.error { "Post request sendNotification failed" }
+        }.onSuccess {
+            log.info { "Post request sendNotification succeeded" }
         }
     }
 }

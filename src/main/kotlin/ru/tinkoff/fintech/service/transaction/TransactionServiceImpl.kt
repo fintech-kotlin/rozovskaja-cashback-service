@@ -1,5 +1,9 @@
 package ru.tinkoff.fintech.service.transaction
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import ru.tinkoff.fintech.client.*
@@ -27,37 +31,42 @@ class TransactionServiceImpl(
 
     override fun processTransaction(transaction: Transaction) {
         val card = cardServiceClient.getCard(transaction.cardNumber)
-        val client = clientService.getClient(card.client)
-        val program = loyaltyServiceClient.getLoyaltyProgram(card.loyaltyProgram)
-        val currentCashbackTotalValue =
-            loyaltyPaymentRepository.findByCardIdAndDateTimeAndSign(card.id, transaction.time, sign).sumByDouble { it.value }
-        val transactionInfo = TransactionInfo(
-            program.name,
-            transaction.value,
-            currentCashbackTotalValue,
-            transaction.mccCode,
-            client.birthDate,
-            client.firstName,
-            client.lastName,
-            client.middleName
-        )
-        val cashback = cashbackCalculator.calculateCashback(transactionInfo)
-        loyaltyPaymentRepository.save(LoyaltyPaymentEntity(
-            value = cashback,
-            cardId = card.id,
-            sign = sign,
-            transactionId = transaction.transactionId,
-            dateTime = LocalDateTime.now()
-        ))
-        val notificationMessageInfo = NotificationMessageInfo(
-            client.firstName,
-            card.cardNumber,
-            cashback,
-            transaction.value,
-            program.name,
-            transaction.time
-        )
-        val message = notificationMessageGenerator.generateMessage(notificationMessageInfo)
-        notificationServiceClient.sendNotification(client.id, message)
+        runBlocking(Dispatchers.IO) {
+            val clientAsync = async { clientService.getClient(card.client) }
+            val programAsync = async { loyaltyServiceClient.getLoyaltyProgram(card.loyaltyProgram) }
+            val currentCashbackTotalValue = async {
+                loyaltyPaymentRepository.findByCardIdAndDateTimeAndSign(card.id, transaction.time, sign).sumByDouble { it.value }
+            }
+            val client = clientAsync.await()
+            val program = programAsync.await()
+            val transactionInfo = TransactionInfo(
+                program.name,
+                transaction.value,
+                currentCashbackTotalValue.await(),
+                transaction.mccCode,
+                client.birthDate,
+                client.firstName,
+                client.lastName,
+                client.middleName
+            )
+            val cashback = cashbackCalculator.calculateCashback(transactionInfo)
+            loyaltyPaymentRepository.save(LoyaltyPaymentEntity(
+                value = cashback,
+                cardId = card.id,
+                sign = sign,
+                transactionId = transaction.transactionId,
+                dateTime = LocalDateTime.now()
+            ))
+            val notificationMessageInfo = NotificationMessageInfo(
+                client.firstName,
+                card.cardNumber,
+                cashback,
+                transaction.value,
+                program.name,
+                transaction.time
+            )
+            val message = notificationMessageGenerator.generateMessage(notificationMessageInfo)
+            launch { notificationServiceClient.sendNotification(client.id, message) }
+        }
     }
 }
